@@ -15,7 +15,6 @@ Users.findAll=  function (res){
         res(null,rows[0]);
     });
 };
-
 /* Select one */
 Users.findById= function(id,resp){
     dbConnect.query(`select * from ${table} WHERE id=?`,[id],function(err,rows){
@@ -26,9 +25,39 @@ Users.findById= function(id,resp){
       }
     });
 }
+/* Create Users */
+Users.CreateUser=function(userobject,resp){
+ 
+ dbConnect.query(`INSERT INTO ${table} SET ?`,userobject,function(err,rows){
+    if(err){
+        resp(err,null)
+      }else{
+        resp(null,rows.insertedId);
+      }
+ })
+}
 
-
-
+Users.UpdateUser=function(id,users,resp){
+  dbConnect.query(`Update ${table} SET fname=?,lname=?,phone=? 
+                  WHERE id=?`,
+                  [users.fname,users.lname,users.phone,id],
+                  function(err,rows){
+            if(err){
+                resp(err,null)
+            }else{
+                resp(null,rows);
+            }
+   })
+}
+Users.deleteUser=function(id,resp){
+  dbConnect.query(`delete from ${table}  WHERE id=?`,[id],function(err,rows){
+        if(err){
+          resp(err,null)
+        }else{
+          resp(null,rows);
+        }
+  })
+}
 
 
 
